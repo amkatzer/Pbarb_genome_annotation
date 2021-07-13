@@ -41,6 +41,79 @@
 
 ## 3. Genome Annotation
 ### Transcriptome assembly
+  We used three tissue types to assemble the transcriptome: floral (separated into lateral stamens, ventral stamens, and rest of flower), root, and shoot. Each sample was sequenced using NovaSeq 150 bp paired-end sequencing at KU Medical Center Genomics Core (https://www.kumc.edu/genomics.html) after going through RNA extraction with the Qiagen RNeasy mini prep kit and NEBNext Ultra II directional RNA library prep kit for Illumina + Poly(A) selection.
+  
+1. Trimming
+   - Trimmed first 12 bp off each sequence due to quality and excluded any sequences with low quality using fastp for each sample. 
+```
+fastp -f 12 -i ./Forward/1_S36_L002_R1_001.fastq.gz -I ./Reverse/1_S36_L002_R2_001.fastq.gz -o 1F.fastq.gz -O 1R.fastq.gz -w 1
+``` 
+   - Result of trimming (1 sample):
+```
+Filtering result:
+reads passed filter: 62920484
+reads failed due to low quality: 106614
+reads failed due to too many N: 754
+reads failed due to too short: 13744
+reads with adapter trimmed: 2891176
+bases trimmed due to adapters: 31983123
+``` 
+
+2. Assembly with Trinity
+   - Trinity run on all samples 
+```
+module load trinity/2.8.3
+module load bowtie2/2.3.4.3
+
+Trinity --seqType fq --SS_lib_type FR --left barbForwardfastp2.fastq.gz  --right barbReversefastp2.fastq.gz --max_memory 500G --CPU 24
+``` 
+   - Results:
+```
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':  117271
+Total trinity transcripts:      199546
+Percent GC: 38.31
+
+########################################
+Stats based on ALL transcript contigs:
+########################################
+
+        Contig N10: 4574
+        Contig N20: 3555
+        Contig N30: 2932
+        Contig N40: 2473
+        Contig N50: 2084
+
+        Median contig length: 571
+        Average contig: 1113.20
+        Total assembled bases: 222134494
+
+
+#####################################################
+## Stats based on ONLY LONGEST ISOFORM per 'GENE':
+#####################################################
+
+        Contig N10: 4092
+        Contig N20: 3075
+        Contig N30: 2447
+        Contig N40: 1940
+        Contig N50: 1445
+
+        Median contig length: 355
+        Average contig: 736.71
+        Total assembled bases: 86394222
+```
+
+3. BUSCO score
+   - Code
+```
+module load busco/3.0.2
+
+run_BUSCO.py -i Trinity.fasta -o barb_transcriptome_trinity_eudicot10 -l eudicotyledons_odb10 -m tran -c 5  
+```
+   - Results: C:96.8% [S:41.0%, D:55.8%], F:1.8%, M:1.4%, n:2121
 
 ### Genome annotation
 
