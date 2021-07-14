@@ -1,8 +1,8 @@
 # Genome annotation for *Penstemon barbatus* 
 
 Contact Amanda Katzer: 
-a681k477@ku.edu
-Twitter: @amkatzer
+- a681k477@ku.edu
+- Twitter: @amkatzer
 
 ## Contents
 1. Introduction
