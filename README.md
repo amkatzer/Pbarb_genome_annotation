@@ -7,10 +7,11 @@
 
 ## 1. Introduction
 ### Plant & Genome 
-  *Penstemon barbatus* is a plant species found within Plantaginaceae. This species, like most within *Penstemon* is diploid with 8 pairs of chromosomes (Freeman, 1983). 
+  *Penstemon barbatus* is a plant species found within Plantaginaceae. This species, like most within *Penstemon* is diploid with 8 pairs of chromosomes (Freeman, 1983). The expected length of the genome is 750 Mbps (Broderick *et al.* 2011).
   
 ### References
 1. Freeman, C.C. Chromosome numbers in Great Plains species of Penstemon (Scrophulariaceae). *Brittonia* 35, 232–238 (1983). https://doi.org/10.2307/2806022
+2. Broderick, Shaun R., et al. "A survey of Penstemon’s genome size." Genome 54.2 (2011): 160-173. https://doi.org/10.1139/G10-106 
 
 ## 2. Software links
 ### Used in multiple places
@@ -40,6 +41,12 @@
    - https://www.mpich.org/
 
 ## 3. Genome Annotation
+### Helpful blogs & websites
+1. https://gist.github.com/darencard/bb1001ac1532dd4225b030cf0cd61ce2 **This is what a lot of my code follows when getting into running MAKER**
+2. https://bioinformaticsworkbook.org/dataAnalysis/GenomeAnnotation/Intro_To_Maker.html#gsc.tab=0
+3. MAKER tutorial wiki http://weatherby.genetics.utah.edu/MAKER/wiki/index.php/MAKER_Tutorial_for_WGS_Assembly_and_Annotation_Winter_School_2018
+4. Botany 2020 workshop: https://github.com/bcbc-group/Botany2020NMGWorkshop
+
 ### Transcriptome assembly
   We used three tissue types to assemble the transcriptome: floral (separated into lateral stamens, ventral stamens, and rest of flower), root, and shoot. Each sample was sequenced using NovaSeq 150 bp paired-end sequencing at KU Medical Center Genomics Core (https://www.kumc.edu/genomics.html) after going through RNA extraction with the Qiagen RNeasy mini prep kit and NEBNext Ultra II directional RNA library prep kit for Illumina + Poly(A) selection.
   
@@ -403,3 +410,13 @@ MODEL7466 skipped due to errors
 195.739777 mean exon (min=1 max=6538)
 376.232086 mean intron (min=4 max=14776)
 ```
+
+**To be continued!**
+
+4. Weird MAKER troubleshooting solutions
+   - Running MAKER with MPI will sometimes cause issues with the master_datastore_index.log file. To fix delete the log file and run:
+   ```
+   maker -dsindex -fix_nucleotides -base [same name as run output] 
+   ```
+   - If you are having issues with a scaffold failing due to this error "Can't kill a non-numeric process ID ... line 1050" this is a memory problem. You will need to re-run the scaffold with more memory. If you have run out of attempts, change the number of attempts in the maker_opts.ctl file and re-start the run. Only that scaffold will run. http://yandell-lab.org/pipermail/maker-devel_yandell-lab.org/2017-September/002944.html 
+   - If at any point you hit a time limit but MAKER is not finished, you can stop and re-start. There are checkpoints that MAKER will use so it will not start from where it stopped last instead of the beginning.   
